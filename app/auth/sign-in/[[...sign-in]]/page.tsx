@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function Signin() {
   return (
-    <div className='h-full w-full justify-center items-center'>
+    <div className='h-full w-full justify-center items-center flex'>
       <SignIn />
     </div>
   );
