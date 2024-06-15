@@ -26,7 +26,7 @@ export function RequestCard({
   upvotes,
 }: PropTypes) {
   return (
-    <div className='rounded-lg shadow-md bg-card border border-secondary'>
+    <div className='rounded-lg shadow-md bg-card border border-secondary group'>
       <div className='p-6 space-y-4'>
         <div className='flex items-center justify-between'>
           <h3 className='text-xl font-bold'>{title}</h3>
@@ -39,7 +39,7 @@ export function RequestCard({
         </div>
         <p className='text-muted-foreground'>{description}</p>
         <div className='flex items-center justify-between'>
-          <div className='flex gap-1'>
+          <div className='flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 select-none'>
             <p className='text-muted-foreground'>{authorName},</p>
             <p className='text-muted-foreground'>
               {formatDistanceToNow(createdAt)}
