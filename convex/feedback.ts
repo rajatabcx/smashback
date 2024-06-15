@@ -1,4 +1,4 @@
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 
 export enum RequestStatus {
@@ -13,18 +13,20 @@ export const create = mutation({
   args: {
     title: v.string(),
     description: v.string(),
+    pledgeAmount: v.optional(v.number()),
     projectId: v.id('projects'),
   },
   handler: async (ctx, args) => {
     const author = await ctx.auth.getUserIdentity();
-    if (!author) throw new Error('Unauthorized');
+    if (!author) throw new ConvexError({ message: 'Unauthorized' });
+
     const feedback = await ctx.db.insert('feedbacks', {
       title: args.title,
       description: args.description,
       projectId: args.projectId,
       status: RequestStatus.new,
       authorId: author.subject,
-      authorName: author.name || 'User',
+      authorName: author.givenName || author.name || 'User',
       authorImageURL: author.pictureUrl,
       comments: 0,
       upvotes: 1,
@@ -56,7 +58,9 @@ export const get = query({
       .query('comments')
       .withIndex('by_feedback_id', (q) => q.eq('feedbackId', feedback._id))
       .collect();
-    return comments;
+
+    const isMine = feedback.authorId === author.subject;
+    return { feedback, comments, isMine, author };
   },
 });
 

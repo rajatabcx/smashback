@@ -1,10 +1,11 @@
 import { RequestStatus } from '@/lib/enums';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { formatDistanceToNow } from 'date-fns';
 import { RequestStatusTag } from './RequestStatusTag';
+import Image from 'next/image';
 
 interface PropTypes {
   title: string;
@@ -12,8 +13,12 @@ interface PropTypes {
   authorName: string;
   createdAt: number;
   upvotes: number;
+  comments: number;
   status: RequestStatus;
-  pledgeAmount: number;
+  pledgeAmount?: number;
+  authorImageURL?: string;
+  link: string;
+  disabled?: boolean;
 }
 
 export function RequestCard({
@@ -24,6 +29,10 @@ export function RequestCard({
   status,
   title,
   upvotes,
+  comments,
+  authorImageURL,
+  link,
+  disabled,
 }: PropTypes) {
   return (
     <div className='rounded-lg shadow-md bg-card border border-secondary group'>
@@ -33,31 +42,42 @@ export function RequestCard({
           <div className='flex items-center gap-2'>
             <RequestStatusTag status={status} />
             <div className='rounded-full px-2 py-1 text-xs font-medium bg-primary text-primary-foreground'>
-              ${pledgeAmount} pledged
+              ${pledgeAmount || 0} pledged
             </div>
           </div>
         </div>
         <p className='text-muted-foreground'>{description}</p>
         <div className='flex items-center justify-between'>
           <div className='flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 select-none'>
-            <p className='text-muted-foreground'>{authorName},</p>
-            <p className='text-muted-foreground'>
-              {formatDistanceToNow(createdAt)}
+            <p className='text-muted-foreground flex gap-1 items-center text-sm'>
+              {authorImageURL ? (
+                <Image
+                  src={authorImageURL}
+                  alt='Profile Image'
+                  height={24}
+                  width={24}
+                  className='mr-1 rounded-full'
+                />
+              ) : null}
+              {authorName}, {formatDistanceToNow(createdAt)}
             </p>
           </div>
           <div className='flex gap-4'>
-            <div className='flex items-center gap-2'>
-              <Button variant='secondary'>
-                <ChevronUp className='h-5 w-5 mr-2' />
-                <span>{upvotes} upvotes</span>
-              </Button>
-            </div>
-            <Button asChild variant='outline' size='default'>
-              <Link
-                href='/open-requests'
-                prefetch={false}
-                className='px-6 block'
-              >
+            <Button variant='secondary'>
+              <ChevronUp className='h-5 w-5 mr-2 -ml-[6px]' />
+              <span>{upvotes}</span>
+            </Button>
+            <Button variant='secondary'>
+              <MessageSquare className='h-5 w-5 mr-2 -ml-[6px]' />
+              <span>{comments}</span>
+            </Button>
+            <Button
+              asChild
+              variant='outline'
+              size='default'
+              disabled={!!disabled}
+            >
+              <Link href={link} prefetch={false} className='px-6 block'>
                 View
               </Link>
             </Button>

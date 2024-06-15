@@ -12,7 +12,7 @@ export const create = mutation({
     await ctx.db.insert('comments', {
       comment: args.comment,
       authorId: author.subject,
-      authorName: author.name || 'User',
+      authorName: author.givenName || author.name || 'User',
       authorImageURL: author.pictureUrl,
       feedbackId: args.feedbackId,
     });

@@ -26,7 +26,7 @@ export const create = mutation({
       name: args.name,
       slug: args.slug,
       ownerId: owner.subject,
-      ownerName: owner.name || 'User',
+      ownerName: owner.givenName || owner.name || 'User',
       ownerImageURL: owner.pictureUrl,
     });
     return project;

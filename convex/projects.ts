@@ -9,6 +9,7 @@ export const myProjects = query({
     const projects = await ctx.db
       .query('projects')
       .withIndex('by_owner', (q) => q.eq('ownerId', owner.subject))
+      .order('desc')
       .collect();
 
     return projects;

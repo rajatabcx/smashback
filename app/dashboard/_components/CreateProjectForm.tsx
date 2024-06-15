@@ -44,7 +44,7 @@ export function CreateProjectForm() {
       console.log(res);
       reset({ name: '' });
       toast.success('New project created successfully');
-      router.push(`/dashboard/${res}`);
+      // router.push(`/dashboard/${res}`);
     } catch (err: any) {
       toast.error(err.data.message);
     }

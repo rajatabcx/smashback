@@ -1,14 +1,7 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/5ZNFYspmKyp
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
-import { Squirrel, ThumbsDown, ThumbsUp } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Header } from './_components/Header';
 import { RequestCard } from '@/components/requests/RequestCard';
-import { RequestStatus } from '@/lib/enums';
 import { requests } from '@/lib/constants';
 
 export default function Landing() {
@@ -25,7 +18,7 @@ export default function Landing() {
               <p className='max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400'>
                 Smashback is a SaaS platform that allows you to collect and
                 manage feature requests from your users, and get them funded
-                through a crowdsourcing model.
+                through a crowd sourcing model.
               </p>
             </div>
             <div className='flex flex-col gap-2 min-[400px]:flex-row'>
@@ -66,12 +59,15 @@ export default function Landing() {
                   pledgeAmount={request.pledgeAmount}
                   status={request.status}
                   createdAt={request.createdAt}
+                  comments={request.comments}
+                  link='#'
+                  disabled
                 />
               ))}
             </div>
             <div className='flex justify-center'>
               <Link
-                href='/all-projects'
+                href='/projects'
                 className='inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300'
                 prefetch={false}
               >

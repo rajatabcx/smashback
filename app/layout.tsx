@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={poppins.className}>
-        <NextTopLoader color='#EA580C' />
+        <NextTopLoader color='#EA580C' showSpinner={false} />
         <ThemeProvider
           attribute='class'
           defaultTheme='dark'

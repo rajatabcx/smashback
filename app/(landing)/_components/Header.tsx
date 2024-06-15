@@ -28,20 +28,33 @@ export function Header() {
         >
           All Projects
         </Link>
-        <Link
-          href='#howitworks'
-          className='text-sm font-medium hover:underline underline-offset-4'
-          prefetch={false}
-        >
-          How It Works
-        </Link>
-        <Link
-          href='/pricing'
-          className='text-sm font-medium hover:underline underline-offset-4'
-          prefetch={false}
-        >
-          Pricing
-        </Link>
+        {!sessionId ? null : (
+          <Link
+            href='/dashboard'
+            className='text-sm font-medium hover:underline underline-offset-4'
+            prefetch={false}
+          >
+            Dashboard
+          </Link>
+        )}
+        {!sessionId ? (
+          <>
+            <Link
+              href='#howitworks'
+              className='text-sm font-medium hover:underline underline-offset-4'
+              prefetch={false}
+            >
+              How It Works
+            </Link>
+            <Link
+              href='/pricing'
+              className='text-sm font-medium hover:underline underline-offset-4'
+              prefetch={false}
+            >
+              Pricing
+            </Link>
+          </>
+        ) : null}
         {sessionId ? null : (
           <Link
             href='/auth/sign-in'

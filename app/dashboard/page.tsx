@@ -2,12 +2,9 @@ import { fetchQuery } from 'convex/nextjs';
 
 import { CreateProjectForm } from './_components/CreateProjectForm';
 import { Navbar } from './_components/Navbar';
-import { ProjectCard } from './_components/ProjectCard';
+import { ProjectCard } from '@/components/ProjectCard';
 import { api } from '@/convex/_generated/api';
 import { getAuthToken } from '@/lib/auth';
-import { ScrollArea } from '@/components/ui/scroll-area';
-
-export const dynamic = 'force-dynamic';
 
 export default async function Dashboard() {
   const token = await getAuthToken();
@@ -16,7 +13,7 @@ export default async function Dashboard() {
   return (
     <>
       <Navbar />
-      <div className='light:bg-secondary h-[calc(100vh-56px)]'>
+      <div className='light:bg-secondary h-[calc(100vh-72px)]'>
         <div className='container mx-auto grid grid-cols-6 gap-8 px-4 py-12 lg:px-6 xl:px-8'>
           <div className='flex items-start justify-center col-span-full md:col-span-2'>
             <CreateProjectForm />
@@ -29,11 +26,14 @@ export default async function Dashboard() {
               {projects.length ? (
                 projects.map((project) => (
                   <ProjectCard
+                    link={`/dashboard/${project._id}`}
                     key={project._id}
-                    authorName={project.ownerName}
+                    authorName='You'
                     createdAt={project._creationTime}
                     slug={project.slug}
                     title={project.name}
+                    id={project._id}
+                    authorImageURL={project.ownerImageURL}
                   />
                 ))
               ) : (

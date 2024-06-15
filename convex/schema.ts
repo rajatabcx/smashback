@@ -23,6 +23,7 @@ export default defineSchema({
     projectId: v.id('projects'),
     upvotes: v.number(),
     comments: v.number(),
+    pledgeAmount: v.optional(v.number()),
     status: v.union(
       v.literal('New'),
       v.literal('Work In Progress'),

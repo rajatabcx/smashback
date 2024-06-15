@@ -1,29 +1,14 @@
-'use client';
+import { Navbar } from '../dashboard/_components/Navbar';
+import { Projects } from './_components/Projects';
 
-import { Button } from '@/components/ui/button';
-import { api } from '@/convex/_generated/api';
-import { usePaginatedQuery } from 'convex/react';
-import { Loader } from 'lucide-react';
-
-export default function Projects() {
-  const { results, loadMore, status, isLoading } = usePaginatedQuery(
-    api.projects.allProjects,
-    {},
-    {
-      initialNumItems: 2,
-    }
-  );
+export default function Page() {
   return (
     <div>
-      <div>{JSON.stringify(results, null, 2)}</div>
-      <div className='text-2xl'>{status}</div>
-
-      <Button
-        disabled={status === 'Exhausted' || isLoading}
-        onClick={() => loadMore(1)}
-      >
-        {isLoading ? <Loader className='h-4 w-4 animate-spin' /> : 'Load More'}
-      </Button>
+      <Navbar />
+      {/* TODO: add search bar here */}
+      <div className='container mx-auto px-4 py-12 lg:px-6 xl:px-8'>
+        <Projects />
+      </div>
     </div>
   );
 }

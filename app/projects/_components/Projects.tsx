@@ -1,0 +1,63 @@
+'use client';
+
+import { ProjectCard } from '@/components/ProjectCard';
+import { Button } from '@/components/ui/button';
+import { api } from '@/convex/_generated/api';
+import { useAuth } from '@clerk/nextjs';
+import { usePaginatedQuery } from 'convex/react';
+import { Loader } from 'lucide-react';
+
+export function Projects() {
+  const { userId } = useAuth();
+  const {
+    results: projects,
+    loadMore,
+    status,
+    isLoading,
+  } = usePaginatedQuery(
+    api.projects.allProjects,
+    {},
+    {
+      initialNumItems: 4,
+    }
+  );
+
+  return (
+    <>
+      <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        {!projects.length && !isLoading ? (
+          <div>
+            <h1 className='text-2xl'>No Projects Available</h1>
+          </div>
+        ) : (
+          projects.map((project) => (
+            <ProjectCard
+              key={project._id}
+              authorName={
+                project.ownerId === userId ? 'You' : project.ownerName
+              }
+              createdAt={project._creationTime}
+              slug={project.slug}
+              title={project.name}
+              id={project._id}
+              link={`/p/${project._id}`}
+              authorImageURL={project.ownerImageURL}
+            />
+          ))
+        )}
+      </div>
+
+      <div className='flex justify-center mt-6'>
+        {status === 'Exhausted' ? null : (
+          <Button disabled={isLoading} onClick={() => loadMore(10)} size='lg'>
+            {isLoading ? (
+              <Loader className='h-4 w-4 animate-spin' />
+            ) : (
+              'Load More'
+            )}
+          </Button>
+        )}
+      </div>
+    </>
+  );
+}
