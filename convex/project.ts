@@ -63,7 +63,7 @@ export const projectDetails = query({
       .withIndex('by_project_id', (q) => q.eq('projectId', project._id))
       .collect();
 
-    // use async map to calculate the upvote for multiple feedbacks
+    // TODO: use async map to calculate the upvote for multiple feedbacks
 
     const isMine = project.ownerId === owner?.subject;
 
