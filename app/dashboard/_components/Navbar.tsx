@@ -1,12 +1,13 @@
+'use client';
+
 import { ThemeToggler } from '@/components/ThemeToggler';
-import { UserButton } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
+import { useAuth, UserButton } from '@clerk/nextjs';
 import { Squirrel } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 
 export function Navbar() {
-  const { sessionId } = auth();
+  const { sessionId } = useAuth();
   return (
     <header className='px-4 lg:px-6 flex items-center py-4'>
       <div className='flex gap-1 items-center'>

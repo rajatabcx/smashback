@@ -1,12 +1,12 @@
 'use client';
 
 import { ProjectCard } from '@/components/ProjectCard';
+import { ProjectsLoading } from '@/components/ProjectsLoading';
 import { Button } from '@/components/ui/button';
 import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/nextjs';
 import { usePaginatedQuery } from 'convex/react';
 import { Loader } from 'lucide-react';
-import { ProjectsLoading } from './ProjectsLoading';
 
 export function Projects() {
   const { userId } = useAuth();

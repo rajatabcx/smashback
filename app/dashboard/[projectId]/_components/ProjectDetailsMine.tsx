@@ -3,19 +3,17 @@
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
 import { useQuery } from 'convex/react';
-import { BadgeAlert, LayoutDashboard, OctagonAlert } from 'lucide-react';
-import { ProjectDetailsLoading } from '../../../../components/ProjectDetailsLoading';
+import { BadgeAlert, OctagonAlert } from 'lucide-react';
 import { RequestCard } from '@/components/requests/RequestCard';
 import { RequestStatus } from '@/lib/enums';
 import { useAuth } from '@clerk/nextjs';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { ProjectDetailsLoading } from '@/components/ProjectDetailsLoading';
 
 interface PropTypes {
   id: Id<'projects'>;
 }
 
-export function ProjectDetails({ id }: PropTypes) {
+export function ProjectDetailsMine({ id }: PropTypes) {
   const { userId } = useAuth();
   const project = useQuery(api.project.projectDetails, {
     id,
@@ -27,19 +25,7 @@ export function ProjectDetails({ id }: PropTypes) {
     <>
       {project ? (
         <div>
-          <div className='flex items-center gap-4 mb-6'>
-            <h1>Name: {project.project.name}</h1>
-            {project.isMine ? (
-              <Button variant='outline'>
-                <Link
-                  href={`/dashboard/${id}`}
-                  className='flex items-center gap-1'
-                >
-                  View Dashboard <LayoutDashboard />
-                </Link>
-              </Button>
-            ) : null}
-          </div>
+          <h1 className='mb-6'>Name: {project.project.name}</h1>
           <div className='space-y-4'>
             {!project.feedbacks.length ? (
               <div className='flex flex-col items-center gap-2 my-24'>
@@ -64,8 +50,8 @@ export function ProjectDetails({ id }: PropTypes) {
                   authorImageURL={feedback.authorImageURL}
                   link={`/f/${id}/${feedback._id}`}
                   comments={feedback.comments}
-                  feedbackId={feedback._id}
                   projectId={feedback.projectId}
+                  feedbackId={feedback._id}
                 />
               ))
             )}

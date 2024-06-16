@@ -11,6 +11,9 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 import { useAuth } from '@clerk/nextjs';
 import { SigninModal } from '../SigninModal';
+import { useAPIMutation } from '@/lib/useAPIMutation';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
 
 interface PropTypes {
   title: string;
@@ -24,6 +27,8 @@ interface PropTypes {
   authorImageURL?: string;
   link: string;
   disabled?: boolean;
+  projectId?: Id<'projects'>;
+  feedbackId?: Id<'feedbacks'>;
 }
 
 export function RequestCard({
@@ -38,16 +43,30 @@ export function RequestCard({
   authorImageURL,
   link,
   disabled,
+  feedbackId,
+  projectId,
 }: PropTypes) {
   const { sessionId } = useAuth();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const { mutate, isPending } = useAPIMutation(api.feedback.upvote);
 
   const handleUpvote = async () => {
     try {
+      if (!feedbackId || !projectId) {
+        return;
+      }
       if (!sessionId) {
         setModalOpen(true);
       }
+      const res = await mutate({
+        feedbackId,
+        projectId,
+      });
+
+      toast.message(
+        res ? 'Upvoted feedback successfully' : 'Removed upvote successfully'
+      );
     } catch (err: any) {
       toast.error(err?.data?.message || err?.message);
     }
