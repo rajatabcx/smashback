@@ -6,6 +6,7 @@ import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/nextjs';
 import { usePaginatedQuery } from 'convex/react';
 import { Loader } from 'lucide-react';
+import { ProjectsLoading } from './ProjectsLoading';
 
 export function Projects() {
   const { userId } = useAuth();
@@ -18,7 +19,7 @@ export function Projects() {
     api.projects.allProjects,
     {},
     {
-      initialNumItems: 4,
+      initialNumItems: 12,
     }
   );
 
@@ -26,9 +27,11 @@ export function Projects() {
     <>
       <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {!projects.length && !isLoading ? (
-          <div>
-            <h1 className='text-2xl'>No Projects Available</h1>
+          <div className='col-span-full'>
+            <h1 className='text-2xl text-center'>No Projects Available</h1>
           </div>
+        ) : isLoading ? (
+          <ProjectsLoading />
         ) : (
           projects.map((project) => (
             <ProjectCard

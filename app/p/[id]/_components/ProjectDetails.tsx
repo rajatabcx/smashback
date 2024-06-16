@@ -18,6 +18,7 @@ export function ProjectDetails({ id }: PropTypes) {
   const project = useQuery(api.project.projectDetails, {
     id,
   });
+
   return project === undefined ? (
     <ProjectDetailsLoading />
   ) : (

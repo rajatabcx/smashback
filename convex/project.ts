@@ -53,7 +53,6 @@ export const projectDetails = query({
   },
   handler: async (ctx, args) => {
     const owner = await ctx.auth.getUserIdentity();
-    if (!owner) throw new Error('Unauthorized');
 
     const project = await ctx.db.get(args.id);
 
@@ -64,7 +63,9 @@ export const projectDetails = query({
       .withIndex('by_project_id', (q) => q.eq('projectId', project._id))
       .collect();
 
-    const isMine = project.ownerId === owner.subject;
+    // use async map to calculate the upvote for multiple feedbacks
+
+    const isMine = project.ownerId === owner?.subject;
 
     return { project, feedbacks, isMine };
   },

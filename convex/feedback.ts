@@ -30,6 +30,7 @@ export const create = mutation({
       authorImageURL: author.pictureUrl,
       comments: 0,
       upvotes: 1,
+      pledgeAmount: args.pledgeAmount || 0,
     });
 
     await ctx.db.insert('upvotes', {
@@ -48,7 +49,6 @@ export const get = query({
   },
   handler: async (ctx, args) => {
     const author = await ctx.auth.getUserIdentity();
-    if (!author) throw new Error('Unauthorized');
 
     const feedback = await ctx.db.get(args.id);
 
@@ -57,17 +57,28 @@ export const get = query({
     const comments = await ctx.db
       .query('comments')
       .withIndex('by_feedback_id', (q) => q.eq('feedbackId', feedback._id))
+      .order('desc')
       .collect();
 
-    const isMine = feedback.authorId === author.subject;
-    return { feedback, comments, isMine, author };
+    const upvote = await ctx.db
+      .query('upvotes')
+      .withIndex('by_project_feedback_author', (q) =>
+        q
+          .eq('projectId', feedback.projectId)
+          .eq('feedbackId', feedback._id)
+          .eq('authorId', author?.subject || '')
+      )
+      .unique();
+
+    const isMine = feedback.authorId === author?.subject;
+    return { feedback, comments, isMine, author, upvoted: !!upvote };
   },
 });
 
 export const upvote = mutation({
   args: {
     feedbackId: v.id('feedbacks'),
-    projectId: v.id('feedbacks'),
+    projectId: v.id('projects'),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -88,20 +99,20 @@ export const upvote = mutation({
       .unique();
 
     if (existingUpvote) {
-      await ctx.db.delete(existingUpvote._id);
-      const updatedFeedback = await ctx.db.patch(feedback._id, {
+      const upvote = await ctx.db.delete(existingUpvote._id);
+      await ctx.db.patch(feedback._id, {
         upvotes: feedback.upvotes - 1,
       });
-      return updatedFeedback;
+      return upvote;
     }
-    await ctx.db.insert('upvotes', {
+    const upvote = await ctx.db.insert('upvotes', {
       authorId: identity.subject,
       feedbackId: args.feedbackId,
       projectId: args.projectId,
     });
-    const updatedFeedback = await ctx.db.patch(feedback._id, {
+    await ctx.db.patch(feedback._id, {
       upvotes: feedback.upvotes + 1,
     });
-    return updatedFeedback;
+    return upvote;
   },
 });
