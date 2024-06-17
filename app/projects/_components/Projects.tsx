@@ -3,13 +3,17 @@
 import { ProjectCard } from '@/components/ProjectCard';
 import { ProjectsLoading } from '@/components/ProjectsLoading';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/nextjs';
 import { usePaginatedQuery } from 'convex/react';
 import { Loader } from 'lucide-react';
+import { useDebounceValue } from 'usehooks-ts';
 
 export function Projects() {
   const { userId } = useAuth();
+  const [search, setSearch] = useDebounceValue('', 500);
+
   const {
     results: projects,
     loadMore,
@@ -17,7 +21,9 @@ export function Projects() {
     isLoading,
   } = usePaginatedQuery(
     api.projects.allProjects,
-    {},
+    {
+      name: search,
+    },
     {
       initialNumItems: 12,
     }
@@ -25,6 +31,13 @@ export function Projects() {
 
   return (
     <>
+      <div className='mb-4'>
+        <Input
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder='Search projects...'
+        />
+      </div>
+
       <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
         {!projects.length && !isLoading ? (
           <div className='col-span-full'>

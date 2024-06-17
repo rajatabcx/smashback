@@ -11,7 +11,7 @@ export default function Landing() {
     <div className='flex flex-col min-h-[100dvh]'>
       <Header />
       <main className='flex-1'>
-        <section className='w-full h-screen flex justify-center items-center'>
+        <section className='w-full h-[calc(100vh-72px)] flex justify-center items-center'>
           <div className='container px-4 md:px-6 flex flex-col items-center justify-center space-y-6'>
             <div className='gap-4 text-center flex flex-col items-center'>
               <h1 className='text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl'>

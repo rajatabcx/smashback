@@ -1,5 +1,7 @@
-import { paginationOptsValidator } from 'convex/server';
+import { paginationOptsValidator, PaginationResult } from 'convex/server';
 import { query } from './_generated/server';
+import { v } from 'convex/values';
+import { Id } from './_generated/dataModel';
 
 export const myProjects = query({
   handler: async (ctx) => {
@@ -19,12 +21,29 @@ export const myProjects = query({
 export const allProjects = query({
   args: {
     paginationOpts: paginationOptsValidator,
+    name: v.string(),
   },
   handler: async (ctx, args) => {
-    const projects = await ctx.db
-      .query('projects')
-      .order('desc')
-      .paginate(args.paginationOpts);
+    let projects: PaginationResult<{
+      _id: Id<'projects'>;
+      _creationTime: number;
+      ownerImageURL?: string | undefined;
+      name: string;
+      ownerName: string;
+      ownerId: string;
+      slug: string;
+    }>;
+    if (args.name) {
+      projects = await ctx.db
+        .query('projects')
+        .withSearchIndex('by_project_name', (q) => q.search('name', args.name))
+        .paginate(args.paginationOpts);
+    } else {
+      projects = await ctx.db
+        .query('projects')
+        .order('desc')
+        .paginate(args.paginationOpts);
+    }
     return projects;
   },
 });

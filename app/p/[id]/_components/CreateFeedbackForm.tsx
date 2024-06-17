@@ -62,7 +62,7 @@ export function CreateFeedbackForm({ projectId }: PropTypes) {
       });
       reset({ title: '', description: '', pledgeAmount: '' });
       toast.success('New feedback created successfully');
-      router.push(`/p/${projectId}/${res}`);
+      router.push(`/f/${projectId}/${res}`);
     } catch (err: any) {
       toast.error(err?.data?.message || err?.message);
     }

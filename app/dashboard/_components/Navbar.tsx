@@ -9,7 +9,7 @@ import React from 'react';
 export function Navbar() {
   const { sessionId } = useAuth();
   return (
-    <header className='px-4 lg:px-6 flex items-center py-4'>
+    <header className='px-4 lg:px-6 flex items-center py-4 border-b-[1px] border-border'>
       <div className='flex gap-1 items-center'>
         <Link
           href='/'

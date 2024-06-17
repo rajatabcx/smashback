@@ -8,7 +8,7 @@ import React from 'react';
 export function Header() {
   const { sessionId } = auth();
   return (
-    <header className='px-4 lg:px-6 py-4 flex items-center'>
+    <header className='px-4 lg:px-6 py-4 flex items-center border-b-[1px] border-border sticky top-0 bg-background'>
       <div className='flex gap-1 items-center'>
         <Link
           href='/'
