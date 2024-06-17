@@ -10,6 +10,8 @@ import { RequestStatus } from '@/lib/enums';
 import { useAuth } from '@clerk/nextjs';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import FeedbackOwnerFilter from '@/components/FeedbackOwnerFilter';
+import { useState } from 'react';
 
 interface PropTypes {
   id: Id<'projects'>;
@@ -17,8 +19,10 @@ interface PropTypes {
 
 export function ProjectDetails({ id }: PropTypes) {
   const { userId } = useAuth();
+  const [byOwner, setByOwner] = useState<boolean>(false);
   const project = useQuery(api.project.projectDetails, {
     id,
+    byOwner,
   });
 
   return project === undefined ? (
@@ -27,18 +31,21 @@ export function ProjectDetails({ id }: PropTypes) {
     <>
       {project ? (
         <div>
-          <div className='flex items-center gap-4 mb-6'>
-            <h1>Name: {project.project.name}</h1>
-            {project.isMine ? (
-              <Button variant='outline'>
-                <Link
-                  href={`/dashboard/${id}`}
-                  className='flex items-center gap-1'
-                >
-                  View Dashboard <LayoutDashboard />
-                </Link>
-              </Button>
-            ) : null}
+          <div className='flex items-center justify-between mb-6'>
+            <div className='flex items-center gap-4'>
+              <h1>Name: {project.project.name}</h1>
+              {project.isMine ? (
+                <Button variant='outline'>
+                  <Link
+                    href={`/dashboard/${id}`}
+                    className='flex items-center gap-1'
+                  >
+                    View Dashboard <LayoutDashboard />
+                  </Link>
+                </Button>
+              ) : null}
+            </div>
+            <FeedbackOwnerFilter setByOwner={setByOwner} />
           </div>
           <div className='space-y-4'>
             {!project.feedbacks.length ? (

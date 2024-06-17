@@ -14,7 +14,7 @@ export default function ProjectDetailsPage({
   return (
     <>
       <Navbar />
-      <div className='light:bg-secondary h-[calc(100vh-72px)]'>
+      <div className='light:bg-secondary h-[calc(100vh-72.8px)]'>
         <div className='container mx-auto grid grid-cols-8 gap-8 px-4 py-4 lg:px-6 xl:px-8'>
           <div className='col-span-full'>
             <Link href='/projects'>

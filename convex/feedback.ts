@@ -20,6 +20,8 @@ export const create = mutation({
     const author = await ctx.auth.getUserIdentity();
     if (!author) throw new ConvexError({ message: 'Unauthorized' });
 
+    const project = await ctx.db.get(args.projectId);
+
     const feedback = await ctx.db.insert('feedbacks', {
       title: args.title,
       description: args.description,
@@ -31,6 +33,7 @@ export const create = mutation({
       comments: 0,
       upvotes: 1,
       pledgeAmount: args.pledgeAmount || 0,
+      byOwner: author.subject === project?.ownerId,
     });
 
     await ctx.db.insert('upvotes', {

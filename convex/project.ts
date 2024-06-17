@@ -50,6 +50,7 @@ export const update = mutation({
 export const projectDetails = query({
   args: {
     id: v.id('projects'),
+    byOwner: v.boolean(),
   },
   handler: async (ctx, args) => {
     const owner = await ctx.auth.getUserIdentity();
@@ -60,7 +61,9 @@ export const projectDetails = query({
 
     const feedbacks = await ctx.db
       .query('feedbacks')
-      .withIndex('by_project_id', (q) => q.eq('projectId', project._id))
+      .withIndex('by_project_id_if_owner', (q) =>
+        q.eq('projectId', project._id).eq('byOwner', args.byOwner)
+      )
       .collect();
 
     // TODO: use async map to calculate the upvote for multiple feedbacks

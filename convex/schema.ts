@@ -17,6 +17,7 @@ export default defineSchema({
   feedbacks: defineTable({
     title: v.string(),
     description: v.string(),
+    byOwner: v.boolean(),
     authorId: v.string(),
     authorName: v.string(),
     authorImageURL: v.optional(v.string()),
@@ -34,6 +35,7 @@ export default defineSchema({
   })
     .index('by_author_id', ['authorId'])
     .index('by_project_id', ['projectId'])
+    .index('by_project_id_if_owner', ['projectId', 'byOwner'])
     .searchIndex('by_feedback_title', {
       searchField: 'title',
       filterFields: ['projectId'],
