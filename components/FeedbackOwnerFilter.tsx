@@ -7,12 +7,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Filter } from 'lucide-react';
 import { Dispatch, SetStateAction } from 'react';
+import { cn } from '@/lib/utils';
 
 interface PropTypes {
+  byOwner: boolean;
   setByOwner: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function FeedbackOwnerFilter({ setByOwner }: PropTypes) {
+export default function FeedbackOwnerFilter({
+  byOwner,
+  setByOwner,
+}: PropTypes) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -21,10 +26,16 @@ export default function FeedbackOwnerFilter({ setByOwner }: PropTypes) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side='left'>
-        <DropdownMenuItem onSelect={() => setByOwner(false)}>
+        <DropdownMenuItem
+          onSelect={() => setByOwner(false)}
+          className={cn(!byOwner ? 'bg-secondary' : '')}
+        >
           By Users
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => setByOwner(true)}>
+        <DropdownMenuItem
+          onSelect={() => setByOwner(true)}
+          className={cn(byOwner ? 'bg-secondary' : '')}
+        >
           By Owner
         </DropdownMenuItem>
       </DropdownMenuContent>

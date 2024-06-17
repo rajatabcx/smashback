@@ -1,7 +1,7 @@
 'use client';
 
 import { RequestStatus } from '@/lib/enums';
-import { ChevronUp, MessageSquare } from 'lucide-react';
+import { ChevronUp, Loader, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,13 @@ import { SigninModal } from '../SigninModal';
 import { useAPIMutation } from '@/lib/useAPIMutation';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface PropTypes {
   title: string;
@@ -21,6 +28,7 @@ interface PropTypes {
   authorName: string;
   createdAt: number;
   upvotes: number;
+  upvoted: boolean;
   comments: number;
   status: RequestStatus;
   pledgeAmount?: number;
@@ -29,6 +37,7 @@ interface PropTypes {
   disabled?: boolean;
   projectId?: Id<'projects'>;
   feedbackId?: Id<'feedbacks'>;
+  editable?: boolean;
 }
 
 export function RequestCard({
@@ -45,11 +54,16 @@ export function RequestCard({
   disabled,
   feedbackId,
   projectId,
+  upvoted,
+  editable,
 }: PropTypes) {
   const { sessionId } = useAuth();
 
   const [modalOpen, setModalOpen] = useState(false);
   const { mutate, isPending } = useAPIMutation(api.feedback.upvote);
+  const { mutate: updateStatus, isPending: updatingStatus } = useAPIMutation(
+    api.feedback.updateStatus
+  );
 
   const handleUpvote = async () => {
     try {
@@ -58,6 +72,7 @@ export function RequestCard({
       }
       if (!sessionId) {
         setModalOpen(true);
+        return;
       }
       const res = await mutate({
         feedbackId,
@@ -71,6 +86,27 @@ export function RequestCard({
       toast.error(err?.data?.message || err?.message);
     }
   };
+
+  const handleStatusUpdate = async (newStatus: RequestStatus) => {
+    try {
+      if (!feedbackId || !projectId) {
+        return;
+      }
+      if (!sessionId) {
+        setModalOpen(true);
+        return;
+      }
+      await updateStatus({
+        feedbackId,
+        status: newStatus,
+      });
+
+      toast.message('Updated status successfully');
+    } catch (err: any) {
+      toast.error(err?.data?.message || err?.message);
+    }
+  };
+
   return (
     <>
       <div className='rounded-lg shadow-md bg-card border border-secondary group'>
@@ -86,7 +122,27 @@ export function RequestCard({
               ) : null}
             </div>
           </div>
-          <p className='text-muted-foreground'>{description}</p>
+          <div className='flex items-center justify-between'>
+            <p className='text-muted-foreground'>{description}</p>
+            <div>
+              <Select onValueChange={handleStatusUpdate}>
+                <SelectTrigger className='w-[180px]'>
+                  <SelectValue placeholder={status} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='New'>New</SelectItem>
+                  <SelectItem value='Work In Progress'>
+                    Work In Progress
+                  </SelectItem>
+                  <SelectItem value='Added to Roadmap'>
+                    Added To Roadmap
+                  </SelectItem>
+                  <SelectItem value='Cancelled'>Cancelled</SelectItem>
+                  <SelectItem value='Shipped'>Shipped</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
           <div className='flex items-center justify-between gap-2'>
             <div className='flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 select-none'>
               <p className='text-muted-foreground flex gap-1 items-center text-sm'>
@@ -104,23 +160,23 @@ export function RequestCard({
             </div>
             <div className='flex gap-4'>
               <Button
-                variant='secondary'
+                variant={upvoted ? 'default' : 'secondary'}
                 disabled={!!disabled}
                 onClick={handleUpvote}
+                className='disabled:opacity-100'
               >
                 <ChevronUp className='h-5 w-5 mr-2 -ml-[6px]' />
-                <span>{upvotes}</span>
+                {isPending ? (
+                  <Loader className='h-4 w-4 animate-spin' />
+                ) : (
+                  <span>{upvotes}</span>
+                )}
               </Button>
               <Button variant='secondary'>
                 <MessageSquare className='h-5 w-5 mr-2 -ml-[6px]' />
                 <span>{comments}</span>
               </Button>
-              <Button
-                asChild
-                variant='outline'
-                size='default'
-                disabled={!!disabled}
-              >
+              <Button asChild variant='outline' size='default'>
                 <Link href={link} prefetch={false} className='px-6 block'>
                   View
                 </Link>

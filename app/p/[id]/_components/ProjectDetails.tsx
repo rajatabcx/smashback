@@ -35,7 +35,7 @@ export function ProjectDetails({ id }: PropTypes) {
             <div className='flex items-center gap-4'>
               <h1>Name: {project.project.name}</h1>
               {project.isMine ? (
-                <Button variant='outline'>
+                <Button variant='outline' asChild>
                   <Link
                     href={`/dashboard/${id}`}
                     className='flex items-center gap-1'
@@ -45,7 +45,7 @@ export function ProjectDetails({ id }: PropTypes) {
                 </Button>
               ) : null}
             </div>
-            <FeedbackOwnerFilter setByOwner={setByOwner} />
+            <FeedbackOwnerFilter byOwner={byOwner} setByOwner={setByOwner} />
           </div>
           <div className='space-y-4'>
             {!project.feedbacks.length ? (
@@ -68,6 +68,7 @@ export function ProjectDetails({ id }: PropTypes) {
                   pledgeAmount={feedback.pledgeAmount}
                   status={feedback.status as RequestStatus}
                   upvotes={feedback.upvotes}
+                  upvoted={feedback.upvoted}
                   authorImageURL={feedback.authorImageURL}
                   link={`/f/${id}/${feedback._id}`}
                   comments={feedback.comments}

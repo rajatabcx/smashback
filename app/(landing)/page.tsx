@@ -64,6 +64,7 @@ export default function Landing() {
                   comments={request.comments}
                   link='#'
                   disabled
+                  upvoted={index % 2 === 0}
                 />
               ))}
             </div>

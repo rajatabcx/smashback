@@ -1,5 +1,6 @@
 import { ConvexError, v } from 'convex/values';
 import { query, mutation } from './_generated/server';
+import { asyncMap } from 'convex-helpers';
 
 export const create = mutation({
   args: {
@@ -59,17 +60,28 @@ export const projectDetails = query({
 
     if (!project) throw new Error('Project not found');
 
-    const feedbacks = await ctx.db
+    const feedbacks = ctx.db
       .query('feedbacks')
       .withIndex('by_project_id_if_owner', (q) =>
         q.eq('projectId', project._id).eq('byOwner', args.byOwner)
       )
       .collect();
 
-    // TODO: use async map to calculate the upvote for multiple feedbacks
+    const updatedFeedbacks = await asyncMap(feedbacks, async (item) => ({
+      ...item,
+      upvoted: !!(await ctx.db
+        .query('upvotes')
+        .withIndex('by_project_feedback_author', (q) =>
+          q
+            .eq('projectId', project._id)
+            .eq('feedbackId', item._id)
+            .eq('authorId', owner?.subject || '')
+        )
+        .unique()),
+    }));
 
     const isMine = project.ownerId === owner?.subject;
 
-    return { project, feedbacks, isMine };
+    return { project, feedbacks: updatedFeedbacks, isMine };
   },
 });

@@ -119,3 +119,30 @@ export const upvote = mutation({
     return upvote;
   },
 });
+
+export const updateStatus = mutation({
+  args: {
+    feedbackId: v.id('feedbacks'),
+    status: v.union(
+      v.literal('New'),
+      v.literal('Work In Progress'),
+      v.literal('Added to Roadmap'),
+      v.literal('Shipped'),
+      v.literal('Cancelled')
+    ),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Unauthorized');
+
+    const feedback = await ctx.db.get(args.feedbackId);
+
+    if (!feedback) throw new Error('Feedback not found');
+
+    const updatedFeedback = await ctx.db.patch(feedback._id, {
+      status: args.status,
+    });
+
+    return updatedFeedback;
+  },
+});

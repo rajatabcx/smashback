@@ -39,7 +39,7 @@ export function ProjectDetailsMine({ id }: PropTypes) {
     <div>
       <div className='mb-6 flex justify-between items-center'>
         <h1>Name: {projectDetails.project.name}</h1>
-        <FeedbackOwnerFilter setByOwner={setByOwner} />
+        <FeedbackOwnerFilter byOwner={byOwner} setByOwner={setByOwner} />
       </div>
       <div className='space-y-4'>
         {!projectDetails.feedbacks.length ? (
@@ -67,6 +67,8 @@ export function ProjectDetailsMine({ id }: PropTypes) {
               comments={feedback.comments}
               projectId={feedback.projectId}
               feedbackId={feedback._id}
+              upvoted={feedback.upvoted}
+              editable
             />
           ))
         )}
