@@ -22,6 +22,7 @@ export function Navbar() {
       </div>
       <nav className='ml-auto flex gap-4 sm:gap-6 items-center'>
         {sessionId ? <Link href='/dashboard'>Dashboard</Link> : null}
+        {!sessionId ? <Link href='/auth/sign-in'>Signin</Link> : null}
         <ThemeToggler />
         {sessionId ? <UserButton afterSignOutUrl='/' /> : null}
       </nav>

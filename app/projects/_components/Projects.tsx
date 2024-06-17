@@ -8,10 +8,13 @@ import { api } from '@/convex/_generated/api';
 import { useAuth } from '@clerk/nextjs';
 import { usePaginatedQuery } from 'convex/react';
 import { Loader } from 'lucide-react';
+import { usePostHog } from 'posthog-js/react';
+import { useEffect } from 'react';
 import { useDebounceValue } from 'usehooks-ts';
 
 export function Projects() {
   const { userId } = useAuth();
+  const posthog = usePostHog();
   const [search, setSearch] = useDebounceValue('', 500);
 
   const {
@@ -28,6 +31,14 @@ export function Projects() {
       initialNumItems: 12,
     }
   );
+
+  useEffect(() => {
+    if (search) {
+      posthog.capture('search_all_projects', {
+        search,
+      });
+    }
+  }, [search, posthog]);
 
   return (
     <>

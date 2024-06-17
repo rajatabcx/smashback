@@ -17,6 +17,7 @@ import { useAPIMutation } from '@/lib/useAPIMutation';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { usePostHog } from 'posthog-js/react';
 
 const schema = yup.object().shape({
   name: yup.string().trim().required('Project name is required'),
@@ -27,6 +28,7 @@ const defaultValues = {
 };
 
 export function CreateProjectForm() {
+  const posthog = usePostHog();
   const router = useRouter();
   const { isPending, mutate } = useAPIMutation(api.project.create);
 
@@ -41,10 +43,13 @@ export function CreateProjectForm() {
         name: formData.name,
         slug: convert(formData.name),
       });
-      console.log(res);
+      posthog.capture('project_created', {
+        name: formData.name,
+        slug: convert(formData.name),
+      });
       reset({ name: '' });
       toast.success('New project created successfully');
-      // router.push(`/dashboard/${res}`);
+      router.push(`/dashboard/${res}`);
     } catch (err: any) {
       toast.error(err.data.message);
     }

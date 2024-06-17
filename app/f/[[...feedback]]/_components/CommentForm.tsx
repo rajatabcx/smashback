@@ -9,6 +9,7 @@ import { useAPIMutation } from '@/lib/useAPIMutation';
 import { useAuth } from '@clerk/nextjs';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Loader } from 'lucide-react';
+import { usePostHog } from 'posthog-js/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -27,6 +28,7 @@ interface PropTypes {
 }
 
 export function CommentForm({ feedbackId }: PropTypes) {
+  const posthog = usePostHog();
   const [modalOpen, setModalOpen] = useState(false);
   const { sessionId } = useAuth();
   const { isPending, mutate } = useAPIMutation(api.comment.create);
@@ -46,6 +48,10 @@ export function CommentForm({ feedbackId }: PropTypes) {
       await mutate({
         comment: formData.comment,
         feedbackId,
+      });
+      posthog.capture('commented_on_feedback', {
+        feedbackId,
+        comment: formData.comment,
       });
       reset({
         comment: '',

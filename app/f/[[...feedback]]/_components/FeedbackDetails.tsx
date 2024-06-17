@@ -18,6 +18,7 @@ import { SigninModal } from '@/components/SigninModal';
 import { RequestStatusTag } from '@/components/requests/RequestStatusTag';
 import { RequestStatus } from '@/lib/enums';
 import { useAPIMutation } from '@/lib/useAPIMutation';
+import { usePostHog } from 'posthog-js/react';
 
 interface PropTypes {
   feedbackId: Id<'feedbacks'>;
@@ -25,6 +26,7 @@ interface PropTypes {
 }
 
 export function FeedbackDetails({ feedbackId, projectId }: PropTypes) {
+  const posthog = usePostHog();
   const [modalOpen, setModalOpen] = useState(false);
 
   const { sessionId } = useAuth();
@@ -45,7 +47,10 @@ export function FeedbackDetails({ feedbackId, projectId }: PropTypes) {
         feedbackId,
         projectId,
       });
-
+      posthog.capture(res ? 'upvote_added' : 'upvote_removed', {
+        feedbackId,
+        projectId,
+      });
       toast.message(
         res ? 'Upvoted feedback successfully' : 'Removed upvote successfully'
       );

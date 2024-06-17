@@ -1,12 +1,12 @@
 import { paginationOptsValidator, PaginationResult } from 'convex/server';
 import { query } from './_generated/server';
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
 import { Id } from './_generated/dataModel';
 
 export const myProjects = query({
   handler: async (ctx) => {
     const owner = await ctx.auth.getUserIdentity();
-    if (!owner) throw new Error('Unauthorized');
+    if (!owner) throw new ConvexError({ message: 'Unauthorized' });
 
     const projects = await ctx.db
       .query('projects')

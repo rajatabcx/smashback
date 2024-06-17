@@ -15,6 +15,7 @@ import { Id } from '@/convex/_generated/dataModel';
 import { useAuth } from '@clerk/nextjs';
 import { useState } from 'react';
 import { SigninModal } from '@/components/SigninModal';
+import { usePostHog } from 'posthog-js/react';
 
 const schema = yup.object().shape({
   title: yup.string().trim().required('Title is required'),
@@ -33,6 +34,7 @@ interface PropTypes {
 }
 
 export function CreateFeedbackForm({ projectId }: PropTypes) {
+  const posthog = usePostHog();
   const [modalOpen, setModalOpen] = useState(false);
   const { sessionId } = useAuth();
 
@@ -55,6 +57,12 @@ export function CreateFeedbackForm({ projectId }: PropTypes) {
         return;
       }
       const res = await mutate({
+        title: formData.title,
+        description: formData.description,
+        pledgeAmount: formData.pledgeAmount ? Number(formData.pledgeAmount) : 0,
+        projectId,
+      });
+      posthog.capture('feedback_created', {
         title: formData.title,
         description: formData.description,
         pledgeAmount: formData.pledgeAmount ? Number(formData.pledgeAmount) : 0,

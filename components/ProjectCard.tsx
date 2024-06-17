@@ -1,6 +1,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePostHog } from 'posthog-js/react';
 import React from 'react';
 
 interface PropTypes {
@@ -20,8 +21,19 @@ export function ProjectCard({
   link,
   authorImageURL,
 }: PropTypes) {
+  const posthog = usePostHog();
   return (
-    <div>
+    <div
+      onClick={() => {
+        posthog.capture('project_card_click', {
+          authorName,
+          createdAt,
+          title,
+          link,
+          authorImageURL,
+        });
+      }}
+    >
       <Link href={link}>
         <div className='rounded-lg bg-card p-6 shadow-lg group border border-secondary hover:bg-secondary-foreground transition-all'>
           <div className='space-y-4'>

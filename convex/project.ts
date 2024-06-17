@@ -9,7 +9,7 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const owner = await ctx.auth.getUserIdentity();
-    if (!owner) throw new Error('Unauthorized');
+    if (!owner) throw new ConvexError({ message: 'Unauthorized' });
     const availableProject = await ctx.db
       .query('projects')
       .withIndex('by_owner_slug', (q) =>
@@ -41,7 +41,7 @@ export const update = mutation({
   },
   handler: async (ctx, args) => {
     const owner = await ctx.auth.getUserIdentity();
-    if (!owner) throw new Error('Unauthorized');
+    if (!owner) throw new ConvexError({ message: 'Unauthorized' });
     await ctx.db.patch(args.id, {
       name: args.name,
     });
@@ -58,7 +58,7 @@ export const projectDetails = query({
 
     const project = await ctx.db.get(args.id);
 
-    if (!project) throw new Error('Project not found');
+    if (!project) throw new ConvexError({ message: 'Project not found' });
 
     const feedbacks = ctx.db
       .query('feedbacks')

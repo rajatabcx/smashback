@@ -55,7 +55,7 @@ export const get = query({
 
     const feedback = await ctx.db.get(args.id);
 
-    if (!feedback) throw new Error('Feedback not found');
+    if (!feedback) throw new ConvexError({ message: 'Feedback not found' });
 
     const comments = await ctx.db
       .query('comments')
@@ -85,11 +85,11 @@ export const upvote = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
+    if (!identity) throw new ConvexError({ message: 'Unauthorized' });
 
     const feedback = await ctx.db.get(args.feedbackId);
 
-    if (!feedback) throw new Error('Feedback not found');
+    if (!feedback) throw new ConvexError({ message: 'Feedback not found' });
 
     const existingUpvote = await ctx.db
       .query('upvotes')
@@ -133,11 +133,21 @@ export const updateStatus = mutation({
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Unauthorized');
+    if (!identity) throw new ConvexError({ message: 'Unauthorized' });
 
     const feedback = await ctx.db.get(args.feedbackId);
 
-    if (!feedback) throw new Error('Feedback not found');
+    if (!feedback) throw new ConvexError({ message: 'Feedback not found' });
+
+    const project = await ctx.db.get(feedback.projectId);
+
+    if (!project) throw new ConvexError({ message: 'Project not found' });
+
+    if (project.ownerId !== identity.subject) {
+      throw new ConvexError({
+        message: "You can't update status",
+      });
+    }
 
     const updatedFeedback = await ctx.db.patch(feedback._id, {
       status: args.status,

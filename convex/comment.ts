@@ -8,7 +8,7 @@ export const create = mutation({
   },
   handler: async (ctx, args) => {
     const author = await ctx.auth.getUserIdentity();
-    if (!author) throw new Error('Unauthorized');
+    if (!author) throw new ConvexError({ message: 'Unauthorized' });
 
     const feedback = await ctx.db.get(args.feedbackId);
 

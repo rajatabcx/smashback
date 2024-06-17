@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { usePostHog } from 'posthog-js/react';
 
 interface PropTypes {
   title: string;
@@ -57,6 +58,7 @@ export function RequestCard({
   upvoted,
   editable,
 }: PropTypes) {
+  const posthog = usePostHog();
   const { sessionId } = useAuth();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -79,6 +81,10 @@ export function RequestCard({
         projectId,
       });
 
+      posthog.capture(res ? 'upvote_added' : 'upvote_removed', {
+        feedbackId,
+        projectId,
+      });
       toast.message(
         res ? 'Upvoted feedback successfully' : 'Removed upvote successfully'
       );
@@ -98,6 +104,12 @@ export function RequestCard({
       }
       await updateStatus({
         feedbackId,
+        status: newStatus,
+      });
+
+      posthog.capture('feedback_status_updated', {
+        feedbackId,
+        projectId,
         status: newStatus,
       });
 
@@ -124,24 +136,29 @@ export function RequestCard({
           </div>
           <div className='flex items-center justify-between'>
             <p className='text-muted-foreground'>{description}</p>
-            <div>
-              <Select onValueChange={handleStatusUpdate}>
-                <SelectTrigger className='w-[180px]'>
-                  <SelectValue placeholder={status} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='New'>New</SelectItem>
-                  <SelectItem value='Work In Progress'>
-                    Work In Progress
-                  </SelectItem>
-                  <SelectItem value='Added to Roadmap'>
-                    Added To Roadmap
-                  </SelectItem>
-                  <SelectItem value='Cancelled'>Cancelled</SelectItem>
-                  <SelectItem value='Shipped'>Shipped</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            {editable ? (
+              <div>
+                <Select
+                  onValueChange={handleStatusUpdate}
+                  disabled={!!updatingStatus}
+                >
+                  <SelectTrigger className='w-[180px]'>
+                    <SelectValue placeholder={status} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='New'>New</SelectItem>
+                    <SelectItem value='Work In Progress'>
+                      Work In Progress
+                    </SelectItem>
+                    <SelectItem value='Added to Roadmap'>
+                      Added To Roadmap
+                    </SelectItem>
+                    <SelectItem value='Cancelled'>Cancelled</SelectItem>
+                    <SelectItem value='Shipped'>Shipped</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null}
           </div>
           <div className='flex items-center justify-between gap-2'>
             <div className='flex gap-1 opacity-0 transition-opacity group-hover:opacity-100 select-none'>
