@@ -11,20 +11,21 @@ export const requests: {
   comments: number;
 }[] = [
   {
-    title: 'Install toilet Sear',
-    description: "Install my toilet seat, it's been more than few weeks now.",
-    authorName: 'Binod',
+    title: 'Dark Mode Support',
+    description:
+      'Implement a dark mode theme for improved visibility in low-light environments and reduced eye strain.',
+    authorName: 'James',
     createdAt: 1622559600000,
     upvotes: 150,
-    status: RequestStatus.wip,
+    status: RequestStatus.new,
     pledgeAmount: 2000,
     comments: 20,
   },
   {
-    title: 'Street Light Repair',
+    title: 'Introduce New UI Design with Animations',
     description:
-      'Repair the broken street lights in the main market area to improve safety at night.',
-    authorName: 'Master-ji',
+      'Revamp the user interface with modern design elements and subtle animations to enhance user experience and engagement.',
+    authorName: 'Rony',
     createdAt: 1622646000000,
     upvotes: 100,
     status: RequestStatus.roadmap,
@@ -32,21 +33,21 @@ export const requests: {
     comments: 15,
   },
   {
-    title: 'New Library Books',
+    title: 'Offline Mode Functionality',
     description:
-      'Purchase new books for the village library to encourage reading among the children.',
-    authorName: 'Prahlad',
+      'Enable users to access core features of the app even without an internet connection, ensuring uninterrupted usage in areas with poor connectivity.',
+    authorName: 'Chris',
     createdAt: 1622732400000,
     upvotes: 120,
-    status: RequestStatus.new,
+    status: RequestStatus.wip,
     pledgeAmount: 500,
     comments: 10,
   },
   {
-    title: 'Road Construction',
+    title: 'Multi-language Support',
     description:
-      'Construct a new road to connect the village to the nearby town for better accessibility.',
-    authorName: 'Manju Devi',
+      'Add support for multiple languages to make the app accessible to a wider audience and enhance user inclusivity.',
+    authorName: 'Emma',
     createdAt: 1622905200000,
     upvotes: 300,
     status: RequestStatus.shipped,
@@ -54,21 +55,21 @@ export const requests: {
     comments: 35,
   },
   {
-    title: 'Golden Statue of Bhushan',
+    title: 'Enhanced Security Features',
     description:
-      'Erect a golden statue of Bhushan in the village square to commemorate his contributions.',
-    authorName: 'Bhushan',
+      'Implement additional security measures such as two-factor authentication to safeguard user data and prevent unauthorized access.',
+    authorName: 'Michael',
     createdAt: 1622818800000,
     upvotes: 30,
     status: RequestStatus.cancelled,
-    pledgeAmount: 5000,
+    pledgeAmount: 20,
     comments: 50,
   },
   {
-    title: 'Clean the Pond',
+    title: 'Performance Optimization',
     description:
-      'Clean and maintain the village pond to prevent waterborne diseases and improve aesthetics.',
-    authorName: 'Rinki',
+      'Optimize app performance to reduce loading times, minimize resource consumption, and provide a smoother overall experience for users.',
+    authorName: 'Sarah',
     createdAt: 1622991600000,
     upvotes: 90,
     status: RequestStatus.new,
