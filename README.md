@@ -12,14 +12,14 @@ get feedback on existing project
 
 - [x] Setup landing site
 
-- [ ] Setup dashboard
+- [x] Setup dashboard
 
-- [ ] Setup public project view
+- [x] Setup public project view
 
-- [ ] Setup projects search
+- [x] Setup projects search
 
-- [ ] Setup queries and mutations
+- [x] Setup queries and mutations
 
-- [ ] launch get feedback
+- [x] launch get feedback
 
-- [ ] Toggle b/w kanban view and normal list view
+- bento clone

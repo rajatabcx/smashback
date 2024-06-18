@@ -1,6 +1,5 @@
 import { RequestStatus } from './enums';
 
-// create the tasks of abishek tripathi from panchayat
 export const requests: {
   title: string;
   description: string;
@@ -12,69 +11,68 @@ export const requests: {
   comments: number;
 }[] = [
   {
-    authorName: 'Rajat',
-    createdAt: 1718397341502,
-    pledgeAmount: 2500,
+    title: 'Install toilet Sear',
+    description: "Install my toilet seat, it's been more than few weeks now.",
+    authorName: 'Binod',
+    createdAt: 1622559600000,
+    upvotes: 150,
     status: RequestStatus.wip,
-    title: 'Dark Mode Toggle',
-    description:
-      'Add a dark mode toggle to the app to provide a better user experience for those who prefer a darker interface.',
-    upvotes: 250,
-    comments: 24,
+    pledgeAmount: 2000,
+    comments: 20,
   },
   {
-    authorName: 'Srijita',
-    createdAt: 1718397301502,
-    pledgeAmount: 550,
+    title: 'Street Light Repair',
+    description:
+      'Repair the broken street lights in the main market area to improve safety at night.',
+    authorName: 'Master-ji',
+    createdAt: 1622646000000,
+    upvotes: 100,
     status: RequestStatus.roadmap,
-    title: 'Improved Analytics',
-    description:
-      'Enhance the analytics dashboard to provide more detailed insights and reporting for our users.',
-    upvotes: 125,
-    comments: 82,
+    pledgeAmount: 800,
+    comments: 15,
   },
   {
-    authorName: 'Abhishek',
-    createdAt: 1711397341502,
-    pledgeAmount: 950,
+    title: 'New Library Books',
+    description:
+      'Purchase new books for the village library to encourage reading among the children.',
+    authorName: 'Prahlad',
+    createdAt: 1622732400000,
+    upvotes: 120,
     status: RequestStatus.new,
-    title: 'Improved Onboarding',
-    description:
-      'Create a more intuitive and engaging onboarding experience to help new users get started quickly.',
-    upvotes: 175,
-    comments: 65,
+    pledgeAmount: 500,
+    comments: 10,
   },
   {
-    authorName: 'Rajkumar',
-    createdAt: 1718395341502,
-    pledgeAmount: 5000,
-    status: RequestStatus.cancelled,
-    title: 'New Dashboard',
+    title: 'Road Construction',
     description:
-      'Update the dashboard with shadcn ui and interesting animations, lorem ipsum dolor sit amet',
+      'Construct a new road to connect the village to the nearby town for better accessibility.',
+    authorName: 'Manju Devi',
+    createdAt: 1622905200000,
     upvotes: 300,
-    comments: 112,
-  },
-  {
-    authorName: 'Rohit',
-    createdAt: 1518397341502,
-    pledgeAmount: 2750,
     status: RequestStatus.shipped,
-    title: 'Mobile App',
-    description:
-      'Add a dark mode toggle to the app to provide a better user experience for those who prefer a darker interface.',
-    upvotes: 250,
-    comments: 39,
+    pledgeAmount: 4000,
+    comments: 35,
   },
   {
-    authorName: 'Aaarav',
-    createdAt: 1716397341502,
-    pledgeAmount: 150,
-    status: RequestStatus.new,
-    title: 'Some useless stuff',
+    title: 'Golden Statue of Bhushan',
     description:
-      'Another feature that nobody asked for, really not needed, lorem ipsum dolor sit amet something',
-    upvotes: 250,
-    comments: 91,
+      'Erect a golden statue of Bhushan in the village square to commemorate his contributions.',
+    authorName: 'Bhushan',
+    createdAt: 1622818800000,
+    upvotes: 30,
+    status: RequestStatus.cancelled,
+    pledgeAmount: 5000,
+    comments: 50,
+  },
+  {
+    title: 'Clean the Pond',
+    description:
+      'Clean and maintain the village pond to prevent waterborne diseases and improve aesthetics.',
+    authorName: 'Rinki',
+    createdAt: 1622991600000,
+    upvotes: 90,
+    status: RequestStatus.new,
+    pledgeAmount: 700,
+    comments: 12,
   },
 ];
