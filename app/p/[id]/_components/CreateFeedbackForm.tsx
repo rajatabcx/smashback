@@ -104,7 +104,7 @@ export function CreateFeedbackForm({ projectId }: PropTypes) {
               <TextInput
                 control={control}
                 name='pledgeAmount'
-                label='Pledge Amount'
+                label='Pledge Amount (Optional)'
                 placeholder='Enter the pledge amount'
               />
             </div>
