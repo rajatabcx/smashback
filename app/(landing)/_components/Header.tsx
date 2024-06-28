@@ -45,13 +45,6 @@ export function Header() {
             >
               How It Works
             </Link>
-            <Link
-              href='/pricing'
-              className='text-sm font-medium hover:underline underline-offset-4'
-              prefetch={false}
-            >
-              Pricing
-            </Link>
           </>
         ) : null}
         {sessionId ? null : (
